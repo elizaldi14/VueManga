@@ -1,81 +1,107 @@
-<template>
-  <div class="navbar-container d-flex align-center justify-between px-4 py-2">
-    <!-- Menú móvil -->
-    <IconBtn class="d-lg-none" @click="toggleVerticalOverlayNavActive(true)">
-      <VIcon icon="bx-menu" />
-    </IconBtn>
-
-    <!-- Logo -->
-    <img
-      src="@images/icons/logo/LogoV2.png"
-      alt="Logo"
-      style="width: 100px; height: auto"
-    />
-
-    <!-- Buscador -->
-    <VTextField
-      id="searchInput"
-      v-model="searchInput"
-      prepend-inner-icon="bx-search"
-      placeholder="Buscar"
-      class="mx-4"
-      style="max-width: 300px; border-radius: 2rem"
-    />
-
-    <!-- Opciones principales -->
-    <div class="d-none d-md-flex gap-4" style="margin-left: 1rem">
-      <router-link
-        to="/home"
-        class="text-button mb-0 cursor-pointer menuOption"
-      >
-        Inicio
-      </router-link>
-      <router-link
-        to="/library"
-        class="text-button mb-0 cursor-pointer menuOption"
-      >
-        Biblioteca
-      </router-link>
-      <router-link
-        to="/library"
-        class="text-button mb-0 cursor-pointer menuOption"
-      >
-        Grupos
-      </router-link>
-      <router-link
-        to="/library"
-        class="text-button mb-0 cursor-pointer menuOption"
-      >
-        Listas
-      </router-link>
-    </div>
-
-    <VSpacer />
-
-    <!-- Notificaciones, tema y perfil -->
-    <div class="d-flex align-center gap-2">
-      <IconBtn><VIcon icon="bx-bell" /></IconBtn>
-      <NavbarThemeSwitcher />
-      <UserProfile />
-    </div>
-  </div>
-</template>
-
 <script setup>
 // Import necessary components
 import NavbarThemeSwitcher from "@/layouts/components/NavbarThemeSwitcher.vue";
 import UserProfile from "@/layouts/components/UserProfile.vue";
 import { ref } from "vue";
+import { useDisplay } from "vuetify";
 
 const searchInput = ref("");
 // Define props if needed
-const props = defineProps({
-  toggleVerticalOverlayNavActive: {
-    type: Function,
-    default: () => {},
-  },
-});
+
+const display = useDisplay();
+
+const isMobile = computed(() => display.smAndDown.value);
+const isTablet = computed(() => display.md.value); // md = tablets (~960px de ancho)
+const isPc = computed(() => display.lgAndUp.value); // PC y más
+
+console.log(isMobile, isPc);
+console.log("¿Es tablet?", isTablet);
 </script>
+<template>
+  <div v-if="isPc">
+    <div class="navbar-container d-flex align-center justify-between px-4 py-2">
+      <!-- Logo -->
+      <img
+        src="@images/icons/logo/LogoV2.png"
+        alt="Logo"
+        style="width: 100px; height: auto"
+      />
+
+      <!-- Buscador -->
+      <VTextField
+        id="searchInput"
+        v-model="searchInput"
+        prepend-inner-icon="bx-search"
+        placeholder="Buscar"
+        class="mx-4"
+        style="max-width: 300px; border-radius: 2rem"
+      />
+
+      <!-- Opciones principales -->
+      <div class="d-none d-md-flex gap-4" style="margin-left: 1rem">
+        <router-link
+          to="/home"
+          class="text-button mb-0 cursor-pointer menuOption"
+        >
+          Inicio
+        </router-link>
+        <router-link
+          to="/library"
+          class="text-button mb-0 cursor-pointer menuOption"
+        >
+          Biblioteca
+        </router-link>
+        <router-link
+          to="/library"
+          class="text-button mb-0 cursor-pointer menuOption"
+        >
+          Grupos
+        </router-link>
+        <router-link
+          to="/library"
+          class="text-button mb-0 cursor-pointer menuOption"
+        >
+          Listas
+        </router-link>
+      </div>
+
+      <VSpacer />
+
+      <!-- Notificaciones, tema y perfil -->
+      <div class="d-flex align-center gap-2">
+        <IconBtn><VIcon icon="bx-bell" /></IconBtn>
+        <NavbarThemeSwitcher />
+        <UserProfile />
+      </div>
+    </div>
+  </div>
+
+  <div v-if="isMobile || isTablet">
+    <VContainer class="footer-container" fluid>
+      <div
+        class="navbar-container d-flex align-center justify-between px-4 py-2"
+      >
+        <!-- Logo -->
+        <img
+          src="@images/icons/logo/LogoV2.png"
+          alt="Logo"
+          style="width: 100px; height: auto"
+        />
+
+        <VSpacer />
+
+        <!-- Notificaciones, tema y perfil -->
+        <div class="d-flex align-center gap-2">
+          <IconBtn><VIcon icon="bx-bell" /></IconBtn>
+          <NavbarThemeSwitcher />
+          <IconBtn>
+            <VIcon icon="bx-search" />
+          </IconBtn>
+        </div>
+      </div>
+    </VContainer>
+  </div>
+</template>
 
 <style scoped>
 .navbar-container {
