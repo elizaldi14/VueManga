@@ -69,8 +69,9 @@ defineProps({
   background: rgba(37, 138, 233, 0.8);
   color: white;
   font-size: 0.65rem;
-  padding: 0.1rem 0.3rem;
+  padding: 0.2rem 0.4rem;
   border-radius: 6px;
+  font-size: 1.1rem;
 }
 
 .rating-stars {
